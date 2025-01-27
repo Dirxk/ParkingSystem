@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "Inicio de sesión";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+<form id="login" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-xl-6 mt-5 d-none d-xl-block">
+                <img src="https://img.freepik.com/vector-premium/diseno-plantilla-logotipo-coche-estacionamiento_20029-1037.jpg" class="img-fluid rounded-start" style="height: 25rem; object-fit: cover;" alt="Imagen de Steam">
+            </div>
+            <div class="col-12 col-xl-6 mb-4 mt-5">
+                <div class="row">
+                    <div class="col-12 text-center mb-5">
+                        <h1>Inicio de Sesión</h1>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text justify-content-center d-inline-block" id="basic-addon1">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                        <input type="email" class="form-control input-valid-out" id="email" name="email" placeholder="Correo" aria-label="email" aria-describedby="basic-addon1" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary toggle-password" type="button">
+                                <i class="fas fa-lock"></i>
+                            </button>
+                        </div>
+                        <input type="password" class="form-control password-input input-valid-out" id="password" name="password" minlength="8" placeholder="Contraseña" aria-label="Password" aria-describedby="basic-addon1" required>
+                    </div>
+                    <div class="col-12 d-grid gap-2 mb-3">
+                        <button class="btn btn-dark" id="btnlogin" type="submit">
+                            Iniciar Sesión
+                        </button>
+
+
+                    </div>
+                    <div class="col-12 text-center mb-3">
+                        <a href="#" id="register-link">¿No tienes cuenta? Regístrate</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script>
+        function GetUrl(action, controller) {
+            const urlBase = '@Url.Action("__action__", "__controller__")';
+            return urlBase.replace("__action__", action).replace("__controller__", controller);
+        }
+        $(function () {
+            // Funcionalidad para mostrar/ocultar contraseña
+            $(".toggle-password").click(function () {
+                const $passwordInput = $('.password-input');
+                const $icon = $(this).find('i');
+
+                if ($passwordInput.attr('type') === 'password') {
+                    $passwordInput.attr('type', 'text');
+                    $icon.removeClass('fa-lock').addClass('fa-lock-open');
+                } else {
+                    $passwordInput.attr('type', 'password');
+                    $icon.removeClass('fa-lock-open').addClass('fa-lock');
+                }
+            });
+
+            // Redireccionar al registro
+            $("#register-link").click(function (event) {
+                event.preventDefault(); // Evitar comportamiento por defecto del enlace
+                const url = GetUrl("Logout", "Usuarios"); // Cambiar por la vista que deseas
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    beforeSend: function () {
+                        mostrarModal();
+                    },
+                    success: function (data) {
+                        setTimeout(function () {
+                            ocultarModal();
+                            window.location.href = url;
+                        }, 3000);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error en la solicitud:", textStatus, errorThrown);
+                    },
+                    complete: function (jqXHR, textStatus) {
+                        setTimeout(function () {
+                            ocultarModal();
+                        }, 3000);
+                        console.log("Solicitud completada con estado:", textStatus);
+                    }
+                });
+            });
+
+            // Validación del formulario con jQuery Validate
+            $("#login").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "Por favor, ingresa tu correo.",
+                        email: "Por favor, ingresa un correo válido."
+                    },
+                    password: {
+                        required: "Por favor, ingresa tu contraseña.",
+                        minlength: "La contraseña debe tener al menos 8 caracteres."
+                    }
+                },
+                submitHandler: function (form) {
+                    var url = GetUrl("Panel", "Home");
+                    // console.log(url)
+                    // return;
+                    $.ajax({
+                        type: 'get',
+                        url: url,
+                        beforeSend: function () {
+                            mostrarModal();
+                        },
+                        success: function (data) {
+                            Swal.fire({
+                                title: "Inicio de Sesión exitoso",
+                                icon: "success",
+                                draggable: true
+                            });
+                            setTimeout(function () {
+                                ocultarModal();
+                                window.location.href = url;
+                            }, 5000);
+                            
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error en la solicitud:", textStatus, errorThrown);
+                        },
+                        complete: function (jqXHR, textStatus) {
+                            setTimeout(function () {
+                                ocultarModal();
+                            }, 5000);
+                            console.log("Solicitud completada con estado:", textStatus);
+                        }
+                    });
+                },
+                errorPlacement: function (error, element) {
+                    // Ajustar las alertas para que ocupen el ancho completo de la columna
+                    error.addClass('col-12 mb-2 mt-2 bg-danger text-white text-center p-2 rounded');
+                    error.insertAfter(element); // Insertar alerta justo después del input
+                },
+                errorElement: 'div',
+                errorClass: 'alert-validate'
+            });
+        });
+    </script>
+
+}
+
+
+
+
+
+

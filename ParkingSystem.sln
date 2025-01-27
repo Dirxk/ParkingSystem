@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkingSystem", "ParkingSystem\ParkingSystem.csproj", "{957C806D-5A88-4D23-9104-7D9234F521DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeracromController", "TeracromController\TeracromController.csproj", "{3D837ACD-C0E0-4A84-AD10-4F5923E79342}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeracromModels", "TeracromModels\TeracromModels.csproj", "{D7F97D32-2808-4D42-820F-0299AB4E5373}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeracromDatabase", "TeracromDatabase\TeracromDatabase.csproj", "{92B049A8-6D50-4672-B000-033F25B1A623}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{957C806D-5A88-4D23-9104-7D9234F521DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{957C806D-5A88-4D23-9104-7D9234F521DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{957C806D-5A88-4D23-9104-7D9234F521DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{957C806D-5A88-4D23-9104-7D9234F521DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D837ACD-C0E0-4A84-AD10-4F5923E79342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D837ACD-C0E0-4A84-AD10-4F5923E79342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D837ACD-C0E0-4A84-AD10-4F5923E79342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D837ACD-C0E0-4A84-AD10-4F5923E79342}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F97D32-2808-4D42-820F-0299AB4E5373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F97D32-2808-4D42-820F-0299AB4E5373}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F97D32-2808-4D42-820F-0299AB4E5373}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F97D32-2808-4D42-820F-0299AB4E5373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B049A8-6D50-4672-B000-033F25B1A623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B049A8-6D50-4672-B000-033F25B1A623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B049A8-6D50-4672-B000-033F25B1A623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B049A8-6D50-4672-B000-033F25B1A623}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F29F2F8C-92E7-4833-A6B0-A2472F0053CE}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ParkingSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ParkingSystem.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+</head>
+<body class="d-flex flex-column h-100">
+    
+    
+    <main class="flex-shrink-0">
+        <header>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/Usuarios/Login">
+                        <img src="https://logowik.com/content/uploads/images/bootstrap-new725.logowik.com.webp" alt="Logo" class="img-fluid" style="max-height: 40px;">
+                    </a>
+                    <div>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="User Icon" class="img-fluid rounded-circle" style="max-height: 30px;">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <!-- dropdown-menu-end para alinearlo correctamente -->
+                            <li><a class="dropdown-item" href="#">Cuenta</a></li>
+                            <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <nav class="navbar navbar-expand-lg navbar-dark nvColor">
+                <div class="container-fluid">
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav"
+                            aria-controls="navbarNav"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="list-unstyled w-100 d-flex flex-column flex-lg-row justify-content-lg-around align-items-lg-center">
+                            <li class="d-flex flex-column align-items-start align-items-lg-center text-start text-lg-center mb-2 mb-lg-0">
+                                <a class="nav-link nvText" asp-action="Panel" asp-controller="Home">
+                                    <i class="fas fa-tachometer-alt fa-1x d-none d-lg-block"
+                                       asp-action="Panel" asp-controller="Home"></i>Panel
+                                </a>
+                            </li>
+                            <li class="d-flex flex-column align-items-start align-items-lg-center text-start text-lg-center mb-2 mb-lg-0">
+                                <a class="nav-link nvText" asp-action="Vehiculo" asp-controller="Home">
+                                    <i class="fas fa-car fa-1x d-none d-lg-block"></i>Vehículos
+                                </a>
+                            </li>
+                            <li class="d-flex flex-column align-items-start align-items-lg-center text-start text-lg-center mb-2 mb-lg-0">
+                                <a class="nav-link nvText" asp-action="EntradasSalidas" asp-controller="Home">
+                                    <i class="fas fa-calendar-check fa-1x d-none d-lg-block"></i>Entradas y Salidas
+                                </a>
+                            </li>
+                            <li class="d-flex flex-column align-items-start align-items-lg-center text-start text-lg-center mb-2 mb-lg-0">
+                                <a class="nav-link nvText" asp-action="VUsuarios" asp-controller="Home">
+                                    <i class="fas fa-users fa-1x d-none d-lg-block"></i>Usuarios
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <partial name="_GlobalModal" />
+        </header>
+        <div class="container-fluid">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </main>
+    
+    <footer class="footer mt-auto d-flex flex-wrap justify-content-between align-items-center py-1 border-top bg-dark text-white text-center">
+        <p class="col-md-4 mb-0 text-body-secondary ms-4 ms-md-0">© 2025 Teracrom</p>
+
+
+        <ul class="nav col-md-4 justify-content-end px-3 mx-4">
+            <li class="nav-item "> <a class="nav-link nvText px-2 text-body-secondary" asp-action="Login" asp-controller="Usuarios">Home</a></li>
+            <li class="nav-item"><a class="nav-link nvText px-2 text-body-secondary" asp-action="Privacy" asp-controller="Home">Privacy</a></li>
+        </ul>
+    </footer>
+
+    
+
+    @* <footer class="border-top footer text-muted text-center p-2 bg-dark text-white">
+        <div class="container">
+            &copy; 2025 - ParkingSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer> *@
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/global.js" asp-append-version="true"></script>
+    @await Html.PartialAsync("_GlobalModal")
+</body>
+</html>

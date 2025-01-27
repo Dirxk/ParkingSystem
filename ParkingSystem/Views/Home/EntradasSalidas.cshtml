@@ -1,0 +1,195 @@
+﻿@{
+    ViewData["Title"] = "Entradas y Salidas";
+}
+
+<header>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.grapecity.com/wijmo/5.20242.30/styles/wijmo.min.css" rel="stylesheet">
+</header>
+
+<div class="card text-center mt-3">
+    <div class="card-header d-flex align-items-center" style="font-size: 1.5rem;">
+        <div class="col-6 d-flex align-items-center">
+            <i class="fa-solid fa-car d-lg-block d-none" style="font-size: 2rem; margin-right: 8px;"></i>
+            <span>Entradas y Salidas</span>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <button type="button" id="btnReloadES" name="btnReloadES" class="btn btn-primary me-2 align-content-center">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button type="button" class="btn btn-success align-content-center" data-bs-toggle="modal" data-bs-target="#ESModal">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-8 col-md-4 d-flex justify-content-start align-items-center">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <label for="dateRange" class="form-label me-3">Selecciona la Fecha</label>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group d-flex align-items-center">
+                            <div id="dateRange" class="flex-grow-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 d-flex justify-content-start align-items-center">
+                <div class="form-check d-flex align-items-center mt-4">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label p-2" for="flexCheckDefault">
+                        Todos
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <div id="ESgrid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ESModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Vehiculo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label for="inputCorreo" class="form-label">Placas:</label>
+                            <input type="email" class="form-control" id="inputCorreo" placeholder="Placas del vehiculo">
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="PuertaAcceso" class="form-label">Puerta de acceso:</label>
+                                <div id="PuertaAcceso"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnRegistrarVehiculo">Registrar vehiculo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.input.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.grid.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.grid.filter.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.grid.cellmaker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        var gridEntradasSalidas = null;
+        var dateRange;
+
+        function verEntradasSalidas() {
+            const selectedDate = dateRange.value;
+            const urlGetEntradasSalidas = '@Url.Action("GetEntradasSalidas", "ParkingSystem")';
+
+            $.ajax({
+                type: 'post',
+                data: {
+                    fechaSeleccionada: selectedDate
+                },
+                url: urlGetEntradasSalidas,
+                success: function (datos) {
+                    gridEntradasSalidas.itemsSource = datos.data;
+                },
+                error: function () {
+                    console.error("Error al obtener los vehículos.");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            // Initialize the InputDate component
+            dateRange = new wijmo.input.InputDate('#dateRange', {
+                placeholder: 'Selecciona una fecha',
+            });
+
+            gridEntradasSalidas = new wijmo.grid.FlexGrid('#ESgrid', {
+                autoGenerateColumns: false,
+                headersVisibility: 'Column',
+                columns: [
+                    { binding: 'idEntrada_Salida', header: 'Identificador', width: '*' },
+                    { binding: 'fechaEntrada', header: 'Fecha Entrada', width: '*' },
+                    { binding: 'puertaAcceso', header: 'Puerta Acceso', width: '*' },
+                    { binding: 'folio', header: 'Folio', width: '*' },
+                    { binding: 'usuarioEntrada', header: 'Usuario - Entrada', width: '*' },
+                ],
+                isReadOnly: true  // Deshabilita la edición de las celdas
+            });
+            verEntradasSalidas();
+
+            $('#btnReloadES').on('click', function () {
+                let timerInterval;
+                Swal.fire({
+                    title: "Recargando",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        timerInterval = setInterval(() => { }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        verEntradasSalidas();
+                        console.log("Grid recargado");
+                    }
+                });
+            });
+
+            function getData() {
+                return [
+                    { Door: 'Acceso 1' },
+                    { Door: 'Acceso 2' },
+                    { Door: 'Acceso 3' },
+                    { Door: 'Acceso 4' },
+                    { Door: 'Acceso 5' },
+                ];
+            }
+
+
+            let PuertaAcceso = new wijmo.input.AutoComplete('#PuertaAcceso', {
+                displayMemberPath: 'Door',
+                itemsSource: getData()
+            });
+
+            $("#btnRegistrarVehiculo").on("click", function () {
+                // Mostrar el mensaje de SweetAlert2
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "El vehículo ha sido registrado con éxito",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                // Cerrar el modal
+                $("#ESModal").modal("hide");
+            });
+
+
+        });
+    </script>
+}

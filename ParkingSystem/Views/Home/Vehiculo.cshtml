@@ -1,0 +1,139 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Vehiculo";
+}
+
+<header>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.grapecity.com/wijmo/5.20242.30/styles/wijmo.min.css" rel="stylesheet">
+</header>
+
+<div class="container-fluid">
+    <div class="card text-center mt-3">
+        <div class="card-header d-flex align-items-center " style="font-size: 1.5rem;">
+            <div class="col-6 d-flex align-items-center">
+                <i class="fa-solid fa-car d-lg-block d-none" style="font-size: 2rem; margin-right: 8px;"></i>
+                <span>Vehículos</span>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+                <button type="button" id="btnReloadCar" name="btnReloadCar" class="btn btn-primary align-content-center">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+               
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="vehiculosGrid"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.input.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.grid.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.grid.filter.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.20242.30/controls/wijmo.grid.cellmaker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        var gridVehiculos1 = null;
+        var dateRange;
+        const urlGetVehiculo = '@Url.Action("GetVehiculo", "ParkingSystem")';
+
+        function verVehiculos() {
+            $.ajax({
+                type: 'post',
+                data: {},
+                url: urlGetVehiculo,
+                success: function (datos) {
+                    gridVehiculos1.itemsSource = datos.data;
+                },
+                error: function () {
+                    console.error("Error al obtener los vehiculos.");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            gridVehiculos1 = new wijmo.grid.FlexGrid('#vehiculosGrid', {
+                autoGenerateColumns: false,
+                headersVisibility: 'Column',
+                columns: [
+                    { binding: 'idVehiculo', header: 'IdVehiculo', width: '*' },
+                    { binding: 'placas', header: 'Placas', width: '*' },
+                    { binding: 'tipo', header: 'Tipo', width: '*' }
+                ],
+                isReadOnly: true
+
+            });
+            verVehiculos();
+
+            $('#btnReloadCar').on('click', function () {
+                let timerInterval;
+                Swal.fire({
+                    title: "Recargando",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        timerInterval = setInterval(() => { }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        verVehiculos(); 
+                        console.log("Grid recargado");
+                    }
+                });
+            });
+
+
+            // let UsuarioAcceso = new wijmo.input.AutoComplete('#UsuarioAcceso', {
+            //     displayMemberPath: 'nombreCompleto', 
+            //     selectedValuePath: 'idUsuario', 
+            //     itemsSourceFunction: function (query, max, callback) {
+            //         $.ajax({
+            //             type: 'post',
+            //             url: '/ParkingSystem/GetUsuarios', 
+            //             data: {}, 
+            //             success: function (response) {
+                            
+            //                 const usuarios = response.data.map(function (usuario) {
+            //                     return {
+            //                         idUsuario: usuario.idUsuario,
+            //                         nombreCompleto: usuario.nombre + ' ' + usuario.apellido 
+            //                     };
+            //                 });
+                            
+            //                 const filtered = usuarios.filter(function (item) {
+            //                     return item.nombreCompleto.toLowerCase().includes(query.toLowerCase());
+            //                 });
+            //                 callback(filtered); 
+            //             },
+            //             error: function () {
+            //                 console.error('Error al obtener los usuarios.');
+            //                 callback([]); 
+            //             }
+            //         });
+            //     }
+            // });
+
+            // UsuarioAcceso.selectedIndexChanged.addHandler(function () {
+            //     const selectedUser = UsuarioAcceso.selectedItem;
+            //     if (selectedUser) {
+            //         console.log('Usuario seleccionado:', selectedUser);
+            //     }
+            // });
+
+        });
+    </script>
+}
+
+
