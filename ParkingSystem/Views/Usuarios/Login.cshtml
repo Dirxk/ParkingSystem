@@ -36,8 +36,11 @@
                         </button>
                     </div>
                     <div class="col-12 text-center mb-3">
-                        <a href="#" id="register-link">¿No tienes cuenta? Regístrate</a>
+                        <a id="register-link" class="custom-link" href="#">
+                            ¿No tienes cuenta? Regístrate
+                        </a>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -83,7 +86,7 @@
                         setTimeout(function () {
                             ocultarModal();
                             window.location.href = url;
-                        }, 3000);
+                        }, 1000);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.error("Error en la solicitud:", textStatus, errorThrown);
@@ -128,21 +131,24 @@
                         type: 'POST',
                         url: urlVerificarUsuario,
                         data: { email: email, password: password },
-                        beforeSend: function () {
-                            mostrarModal();
-                        },
                         success: function (response) {
                             if (response.resultado) {
+                                // Mostrar modal solo si es exitoso
+                                mostrarModal();
+
                                 Swal.fire({
                                     title: "Inicio de Sesión exitoso",
                                     icon: "success",
                                     draggable: true
+                                }).then(() => {
+                                    // Ocultar modal 1000 ms después de presionar OK
+                                    setTimeout(function () {
+                                        ocultarModal();
+                                        window.location.href = '@Url.Action("Panel", "Home")';
+                                    }, 1000);
                                 });
-                                setTimeout(function () {
-                                    ocultarModal();
-                                    window.location.href = '@Url.Action("Panel", "Home")';
-                                }, 2000);
                             } else {
+                                // Manejo de error, no se muestra el modal
                                 Swal.fire({
                                     title: "Error",
                                     text: response.mensaje || "Credenciales inválidas.",
@@ -152,15 +158,13 @@
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
+                            // Manejo de error, no se muestra el modal
                             console.error("Error en la solicitud:", textStatus, errorThrown);
                             Swal.fire({
                                 title: "Error",
                                 text: "Ocurrió un error inesperado. Inténtalo de nuevo.",
                                 icon: "error"
                             });
-                        },
-                        complete: function () {
-                            ocultarModal();
                         }
                     });
                 },
@@ -171,6 +175,8 @@
                 errorElement: 'div',
                 errorClass: 'alert-validate'
             });
+
+
 
 
         });

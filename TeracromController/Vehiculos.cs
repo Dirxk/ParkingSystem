@@ -1,5 +1,6 @@
 ﻿using TeracromDatabase;
 using TeracromModels;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TeracromController
 {
@@ -20,16 +21,19 @@ namespace TeracromController
                 string sql = "SELECT IdUsuario, Nombre, Apellido, Correo, Contrasena, Imagen FROM Usuarios;";
                 var User = await _databaseService.QueryAsync<dynamic>(sql);
                 respuestaUser.resultado = true;
-                respuestaUser.data = User.Select(s => new Vehiculo
+                respuestaUser.data = User.Select(s => new Usuario
                 {
-                    IdVehiculo = s.IdVehiculo,
-                    Placas = s.Placas,
-                    Tipo = s.Tipo,
+                    IdUsuario = s.IdUsuario,
+                    Nombre = s.Nombre,
+                    Apellido = s.Apellido,
+                    Correo = s.Correo,
+                    Contrasena = s.Contrasena,
+                    Imagen = s.Imagen
                 }).ToList();
             }
             catch (Exception ex)
             {
-                respuestaUser.mensaje = "Ocurrió un error al obtener los datos del vehículo." + ex.Message;
+                respuestaUser.mensaje = "Ocurrió un error al obtener los datos del Usuario." + ex.Message;
             }
             return respuestaUser;
         }
