@@ -2,17 +2,20 @@
     ViewData["Title"] = "Entradas y Salidas";
 }
 
-<header>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.grapecity.com/wijmo/5.20242.30/styles/wijmo.min.css" rel="stylesheet">
-</header>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://cdn.grapecity.com/wijmo/5.20242.30/styles/wijmo.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
 
 <div class="card text-center mt-3">
-    <div class="card-header d-flex align-items-center" style="font-size: 1.5rem;">
+    <div class="card-header d-flex align-items-center">
         <div class="col-6 d-flex align-items-center">
-            <i class="fa-solid fa-car d-lg-block d-none" style="font-size: 2rem; margin-right: 8px;"></i>
-            <span>Entradas y Salidas</span>
+            <i class="fa-solid fa-car fa-2x d-lg-block d-none mb-2 me-3" style="margin-right: 8px;"></i>
+            <h2 class="d-none d-lg-block" style="font-family: 'Rubik', sans-serif;">Entradas y Salidas</h2>
+            <h5 class="d-block d-lg-none" style="font-family: 'Rubik', sans-serif;">Entradas y Salidas</h5>
         </div>
+
         <div class="col-6 d-flex justify-content-end">
             <button type="button" id="btnReloadES" name="btnReloadES" class="btn btn-primary me-2 align-content-center">
                 <i class="fas fa-sync-alt"></i>
@@ -24,7 +27,7 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-8 col-md-4 d-flex justify-content-start align-items-center">
+            <div class="col-6 col-md-4 d-flex justify-content-start align-items-center">
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <label for="dateRange" class="form-label me-3">Selecciona la Fecha</label>
@@ -44,10 +47,18 @@
                     </label>
                 </div>
             </div>
+            <div class="col-4 col-md-6 d-flex justify-content-start align-items-center justify-content-end">
+                <button type="button" class="btn btn-primary mt-4">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+
         </div>
         <div class="row mt-5">
             <div class="col-12">
-                <div id="ESgrid"></div>
+                <div class="table-responsive">
+                    <div id="ESgrid"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -128,11 +139,11 @@
                 autoGenerateColumns: false,
                 headersVisibility: 'Column',
                 columns: [
-                    { binding: 'idEntrada_Salida', header: 'Identificador', width: '*' },
-                    { binding: 'fechaEntrada', header: 'Fecha Entrada', width: '*' },
-                    { binding: 'puertaAcceso', header: 'Puerta Acceso', width: '*' },
-                    { binding: 'folio', header: 'Folio', width: '*' },
-                    { binding: 'usuarioEntrada', header: 'Usuario - Entrada', width: '*' },
+                    { binding: 'idEntrada_Salida', header: '#', width: 50, align: 'Center' },
+                    { binding: 'fechaEntrada', header: 'Fecha Entrada', width: '*', align: 'Center' },
+                    { binding: 'puertaAcceso', header: 'Puerta Acceso', width: '*', align: 'Center' },
+                    { binding: 'folio', header: 'Folio', width: '*', align: 'Center' },
+                    { binding: 'usuarioEntrada', header: 'Usuario - Entrada', width: '*', align: 'Center' },
                 ],
                 isReadOnly: true  // Deshabilita la edición de las celdas
             });

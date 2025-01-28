@@ -38,5 +38,25 @@ namespace ParkingSystem.Controllers
             RespuestaJson respuestaUser = await new Vehiculos(_databaseService).GetUsuarios();
             return respuestaUser;
         }
+
+        [HttpPost]
+        public async Task<RespuestaJson> VerificarUsuario(string email, string password)
+        {
+            RespuestaJson respuestaUser = new RespuestaJson();
+            try
+            {
+                respuestaUser = await new Vehiculos(_databaseService).VerificarUsuario(email, password);
+            }
+            catch (Exception ex)
+            {
+                respuestaUser.resultado = false;
+                respuestaUser.mensaje = "Ocurrió un error inesperado: " + ex.Message;
+                respuestaUser.error.Add(ex.Message); // Añadimos el error a la lista
+            }
+
+            return respuestaUser;
+        }
+
+
     }
 }

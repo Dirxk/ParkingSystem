@@ -83,17 +83,24 @@
 
     #btnlogin {
         cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.2s ease; /* Animación para transiciones suaves */
+        transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease; /* Animación para transiciones suaves */
+        border: 2px solid transparent; /* Borde por defecto transparente */
     }
 
     #btnlogin:hover {
         background-color: #0056b3; /* Color cuando el cursor está encima */
         transform: scale(1.05); /* Efecto de ligero aumento */
+        border-color: #0056b3; /* Borde con el mismo color que el fondo */
     }
 
     #btnlogin:active {
         background-color: #003f7f; /* Color cuando se hace clic */
         transform: scale(0.95); /* Efecto de presionado */
+        border-color: #003f7f; /* Borde con el mismo color que el fondo */
     }
+
+
+
+    
 
    

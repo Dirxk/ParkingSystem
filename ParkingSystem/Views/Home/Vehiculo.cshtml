@@ -5,17 +5,19 @@
     ViewData["Title"] = "Vehiculo";
 }
 
-<header>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.grapecity.com/wijmo/5.20242.30/styles/wijmo.min.css" rel="stylesheet">
-</header>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://cdn.grapecity.com/wijmo/5.20242.30/styles/wijmo.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
 
 <div class="container-fluid">
     <div class="card text-center mt-3">
-        <div class="card-header d-flex align-items-center " style="font-size: 1.5rem;">
+        <div class="card-header d-flex align-items-center">
             <div class="col-6 d-flex align-items-center">
-                <i class="fa-solid fa-car d-lg-block d-none" style="font-size: 2rem; margin-right: 8px;"></i>
-                <span>Vehículos</span>
+                <i class="fa-solid fa-car fa-2x d-lg-block d-none mb-2 me-3" style="margin-right: 8px;"></i>
+                <h2 class="d-none d-lg-block" style="font-family: 'Rubik', sans-serif;">Vehículo</h2>
+                <h5 class="d-block d-lg-none" style="font-family: 'Rubik', sans-serif;">Vehículo</h5>
             </div>
             <div class="col-6 d-flex justify-content-end">
                 <button type="button" id="btnReloadCar" name="btnReloadCar" class="btn btn-primary align-content-center">
@@ -64,14 +66,15 @@
                 autoGenerateColumns: false,
                 headersVisibility: 'Column',
                 columns: [
-                    { binding: 'idVehiculo', header: 'IdVehiculo', width: '*' },
-                    { binding: 'placas', header: 'Placas', width: '*' },
-                    { binding: 'tipo', header: 'Tipo', width: '*' }
+                    { binding: 'idVehiculo', header: '#', width: 50, align: 'Center' },
+                    { binding: 'placas', header: 'Placas', width: '*', align: 'Center' },
+                    { binding: 'tipo', header: 'Tipo', width: '*', align: 'Center' }
                 ],
                 isReadOnly: true
-
             });
             verVehiculos();
+
+
 
             $('#btnReloadCar').on('click', function () {
                 let timerInterval;
