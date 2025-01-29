@@ -3,7 +3,7 @@
 }
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
-<form id="login" method="post">
+<form id="registerForm" method="post">
     <div class="container">
         <div class="row">
             <div class="col-12 col-xl-6 mt-5 d-none d-xl-block">
@@ -16,38 +16,58 @@
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text justify-content-center d-inline-block btn-outline-secondary btn" id="basic-addon1">
-                                <i class="fas fa-user"></i>
+                            <span class="input-group-text justify-content-center d-inline-block btn-outline-secondary btn" id="addon-nombre">
+                                <i class="fas fa-address-card"></i>
                             </span>
                         </div>
-                        <input type="email" class="form-control input-valid-out" id="email" name="email" placeholder="Correo" aria-label="email" aria-describedby="basic-addon1" required>
+                        <input type="text" class="form-control" id="inputNombre" name="nombre" placeholder="Nombre">
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text justify-content-center d-inline-block btn-outline-secondary btn" id="basic-addon1">
-                                <i class="fas fa-user"></i>
+                            <span class="input-group-text justify-content-center d-inline-block btn-outline-secondary btn" id="addon-apellido">
+                                <i class="fas fa-address-card"></i>
                             </span>
                         </div>
-                        <input type="email" class="form-control input-valid-out" id="Remail" name="Remail" placeholder="Repetir Correo" aria-label="email" aria-describedby="basic-addon1" required>
+                        <input type="text" class="form-control" id="inputApellido" name="apellido" placeholder="Apellido">
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary toggle-password" type="button">
+                            <span class="input-group-text justify-content-center d-inline-block btn-outline-secondary btn" id="addon-email">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="email" class="form-control input-valid-out" id="email" name="email" placeholder="Correo" aria-label="email" aria-describedby="addon-email" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text justify-content-center d-inline-block btn-outline-secondary btn" id="addon-reemail">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="email" class="form-control input-valid-out" id="inputRemail" name="reemail" placeholder="Repetir Correo" aria-label="email" aria-describedby="addon-reemail" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary toggle-password" type="button" id="toggle-password">
                                 <i class="fas fa-lock"></i>
                             </button>
                         </div>
-                        <input type="password" class="form-control password-input input-valid-out" id="password" name="password" minlength="8" placeholder="Contraseña" aria-label="Password" aria-describedby="basic-addon1" required>
+                        <input type="password" class="form-control password-input input-valid-out" id="password" name="password" minlength="8" placeholder="Contraseña" aria-label="Password" aria-describedby="toggle-password" required>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary toggle-password" type="button">
+                            <button class="btn btn-outline-secondary toggle-repetition" type="button" id="toggle-repassword">
                                 <i class="fas fa-lock"></i>
                             </button>
                         </div>
-                        <input type="password" class="form-control password-input input-valid-out" id="Rpassword" name="Rpassword" minlength="8" placeholder="Repetir Contraseña" aria-label="Password" aria-describedby="basic-addon1" required>
+                        <input type="password" class="form-control password-repetition input-valid-out" id="inputRpassword" name="repassword" minlength="8" placeholder="Repetir Contraseña" aria-label="Password" aria-describedby="toggle-repassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputFoto" class="form-label">Selecciona una imagen</label>
+                        <input class="form-control" type="file" id="inputFoto" name="foto" accept="image/*">
                     </div>
                     <div class="col-12 d-grid gap-2 mb-3">
-                        <button class="btn btn-primary" type="submit">
+                        <button class="btn btn-primary" type="submit" id="btnRegistrar">
                             <i class="fas fa-right-to-bracket"></i> Registrar
                         </button>
                     </div>
@@ -55,6 +75,7 @@
             </div>
         </div>
     </div>
+
 </form>
 
 @section Scripts {
@@ -81,90 +102,85 @@
                 }
             });
 
-            // Validación del formulario con jQuery Validate
-            $("#login").validate({
+            $(".toggle-repetition").click(function () {
+                const $passwordInput = $('.password-repetition');
+                const $icon = $(this).find('i');
+
+                if ($passwordInput.attr('type') === 'password') {
+                    $passwordInput.attr('type', 'text');
+                    $icon.removeClass('fa-lock').addClass('fa-lock-open');
+                } else {
+                    $passwordInput.attr('type', 'password');
+                    $icon.removeClass('fa-lock-open').addClass('fa-lock');
+                }
+            });
+            $("#registerForm").validate({
                 rules: {
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    Remail: {
-                        required: true,
-                        email: true,
-                        equalTo: "#email" // Validar que coincida con el correo original
-                    },
-                    password: {
-                        required: true,
-                        minlength: 8
-                    },
-                    Rpassword: {
-                        required: true,
-                        minlength: 8,
-                        equalTo: "#password" // Validar que coincida con la contraseña original
-                    }
+                    nombre: { required: true, minlength: 2 },
+                    apellido: { required: true, minlength: 2 },
+                    email: { required: true, email: true },
+                    reemail: { required: true, email: true, equalTo: "#email" },
+                    password: { required: true, minlength: 8 },  
+                    repassword: { required: true, minlength: 8, equalTo: "#password" },
+                    foto: { required: true}
                 },
                 messages: {
-                    email: {
-                        required: "Por favor, ingresa tu correo.",
-                        email: "Por favor, ingresa un correo válido."
-                    },
-                    Remail: {
-                        required: "Por favor, repite tu correo.",
-                        email: "Por favor, ingresa un correo válido.",
-                        equalTo: "Los correos no coinciden."
-                    },
-                    password: {
-                        required: "Por favor, ingresa tu contraseña.",
-                        minlength: "La contraseña debe tener al menos 8 caracteres."
-                    },
-                    Rpassword: {
-                        required: "Por favor, repite tu contraseña.",
-                        minlength: "La contraseña debe tener al menos 8 caracteres.",
-                        equalTo: "Las contraseñas no coinciden."
-                    }
+                    nombre: { required: "Por favor, ingresa tu nombre.", minlength: "Debe tener al menos 2 caracteres." },
+                    apellido: { required: "Por favor, ingresa tu apellido.", minlength: "Debe tener al menos 2 caracteres." },
+                    email: { required: "Por favor, ingresa tu correo.", email: "Ingresa un correo válido." },
+                    reemail: { required: "Por favor, repite tu correo.", equalTo: "Los correos no coinciden." },
+                    password: { required: "Por favor, ingresa tu contraseña.", minlength: "Debe tener al menos 8 caracteres." },
+                    repassword: { required: "Repite tu contraseña.", equalTo: "Las contraseñas no coinciden." },
+                    foto: { required: "Selecciona una imagen." }
                 },
-                submitHandler: function (form) {
-                    var url = GetUrl("Login", "Usuarios");
-                    // console.log(url)
-                    // return;
+                submitHandler: function (form, event) {
+                    event.preventDefault();
+
+                    var formData = new FormData(form);
+                    formData.append('Correo', $('#email').val());
+                    formData.append('Contrasena', $('#password').val());
+                    formData.append('Imagen', $('#inputFoto').val());
+               
+                    var url = '@Url.Action("RegistrarUsuario", "ParkingSystem")';
+
                     $.ajax({
-                        type: 'get',
+                        type: "POST",
                         url: url,
+                        data: formData,
+                        contentType: false,
+                        processData: false,
                         beforeSend: function () {
+                            console.log("Enviando datos...");
                             mostrarModal();
                         },
-                        success: function (data) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "¡Registro de usuario exitoso!",
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            setTimeout(function () {
-                                ocultarModal();
-                                window.location.href = url;
-                            }, 5000);
-
+                        success: function (response) {
+                            console.log("Respuesta del servidor:", response);
+                            ocultarModal();
+                            if (response.resultado) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "¡Registro exitoso!",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                setTimeout(() => window.location.href = "/Home/Panel", 1000);
+                            } else {
+                                Swal.fire({ icon: "error", title: "Error", text: response.mensaje });
+                            }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.error("Error en la solicitud:", textStatus, errorThrown);
-                        },
-                        complete: function (jqXHR, textStatus) {
-                            setTimeout(function () {
-                                ocultarModal();
-                            }, 5000);
-                            console.log("Solicitud completada con estado:", textStatus);
                         }
                     });
                 },
                 errorPlacement: function (error, element) {
-                    // Ajustar las alertas para que ocupen el ancho completo de la columna
                     error.addClass('col-12 mb-2 mt-2 bg-danger text-white text-center p-2 rounded');
-                    error.insertAfter(element); // Insertar alerta justo después del input
+                    error.insertAfter(element);
                 },
                 errorElement: 'div',
                 errorClass: 'alert-validate'
             });
+
         });
     </script>
 }

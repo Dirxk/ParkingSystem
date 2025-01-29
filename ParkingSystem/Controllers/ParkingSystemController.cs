@@ -58,5 +58,14 @@ namespace ParkingSystem.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<RespuestaJson> RegistrarUsuario([FromForm] Usuario usuario, IFormFile foto)
+        {
+            return await new Vehiculos(_databaseService).RegistrarUsuario(usuario, foto);
+        }
+
+
+
+
     }
 }

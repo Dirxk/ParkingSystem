@@ -1,4 +1,7 @@
-﻿using TeracromDatabase;
+﻿using Dapper;
+using Microsoft.AspNetCore.Http;
+using System.Data;
+using TeracromDatabase;
 using TeracromModels;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -14,7 +17,7 @@ namespace TeracromController
 
         public async Task<RespuestaJson> GetUsuarios()
         {
-
+            
             RespuestaJson respuestaUser = new RespuestaJson();
             try
             {
@@ -85,6 +88,55 @@ namespace TeracromController
 
             return respuestaUser;
         }
+
+        public async Task<RespuestaJson> RegistrarUsuario(Usuario usuario, IFormFile foto)
+        {
+            RespuestaJson respuesta = new RespuestaJson();
+
+            try
+            {
+                byte[] imagenBytes = null;
+
+                if (foto != null && foto.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await foto.CopyToAsync(ms);
+                        imagenBytes = ms.ToArray();
+                    }
+                }
+
+                string sql = @"
+            INSERT INTO Usuarios (Nombre, Apellido, Correo, Contrasena, Imagen) 
+            VALUES (@Nombre, @Apellido, @Correo, EncryptByPassPhrase(@Contrasena, 'P0R1NG5Y5'), @Imagen);";
+
+                var parametros = new DynamicParameters();
+                parametros.Add("@Nombre", usuario.Nombre, DbType.String);
+                parametros.Add("@Apellido", usuario.Apellido, DbType.String);
+                parametros.Add("@Correo", usuario.Correo, DbType.String);
+                parametros.Add("@Contrasena", usuario.Contrasena, DbType.String);
+                parametros.Add("@Imagen", imagenBytes, DbType.Binary);
+
+                int filasAfectadas = await _databaseService.ExecuteAsync(sql, parametros);
+
+                if (filasAfectadas > 0)
+                {
+                    respuesta.resultado = true;
+                    respuesta.mensaje = "Usuario registrado exitosamente.";
+                }
+                else
+                {
+                    respuesta.mensaje = "No se pudo registrar el usuario.";
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.mensaje = "Ocurrió un error al registrar el usuario: " + ex.Message;
+            }
+
+            return respuesta;
+        }
+
 
 
 
