@@ -41,29 +41,25 @@ namespace TeracromController
             return respuestaUser;
         }
 
-
         public async Task<RespuestaJson> VerificarUsuario(string email, string password)
         {
             RespuestaJson respuestaUser = new RespuestaJson();
             try
             {
-                // Consulta SQL para buscar el usuario por correo
-                string sql = "SELECT IdUsuario, Nombre, Apellido, Correo, Contrasena FROM Usuarios WHERE Correo = @Correo";
-                var user = await _databaseService.QueryFirstOrDefaultAsync<dynamic>(sql, new { Correo = email });
+                // Consulta SQL para validar usuario con hash de la contraseña
+                string sql = @"
+            SELECT IdUsuario, Nombre, Apellido, Correo 
+            FROM Usuarios 
+            WHERE Correo = @Correo 
+            AND Contrasena = HASHBYTES('SHA2_256', CONVERT(NVARCHAR(250), @Contrasena))";
+
+                var user = await _databaseService.QueryFirstOrDefaultAsync<dynamic>(sql, new { Correo = email, Contrasena = password });
 
                 // Validar si el usuario existe
                 if (user == null)
                 {
                     respuestaUser.resultado = false;
-                    respuestaUser.mensaje = "El usuario no existe.";
-                    return respuestaUser;
-                }
-
-                // Verificar contraseña (puedes usar hashing aquí si es necesario)
-                if (user.Contrasena != password)
-                {
-                    respuestaUser.resultado = false;
-                    respuestaUser.mensaje = "Contraseña incorrecta.";
+                    respuestaUser.mensaje = "Usuario o contraseña incorrectos.";
                     return respuestaUser;
                 }
 
@@ -77,17 +73,19 @@ namespace TeracromController
                     Apellido = user.Apellido,
                     Correo = user.Correo
                 };
-                respuestaUser.data2 = "Información adicional si es necesaria"; // Ejemplo, puedes adaptarlo según tu caso
             }
             catch (Exception ex)
             {
                 respuestaUser.resultado = false;
                 respuestaUser.mensaje = "Ocurrió un error al verificar las credenciales.";
-                respuestaUser.error.Add(ex.Message); // Añadir detalles del error
+                respuestaUser.error.Add(ex.Message);
             }
 
             return respuestaUser;
         }
+
+
+
 
         public async Task<RespuestaJson> RegistrarUsuario(Usuario usuario, IFormFile foto)
         {
@@ -107,8 +105,9 @@ namespace TeracromController
                 }
 
                 string sql = @"
-            INSERT INTO Usuarios (Nombre, Apellido, Correo, Contrasena, Imagen) 
-            VALUES (@Nombre, @Apellido, @Correo, EncryptByPassPhrase(@Contrasena, 'P0R1NG5Y5'), @Imagen);";
+                INSERT INTO Usuarios (Nombre, Apellido, Correo, Contrasena, Imagen) 
+                VALUES (@Nombre, @Apellido, @Correo, 
+                        HASHBYTES('SHA2_256', CONVERT(NVARCHAR(250), @Contrasena)), @Imagen);";
 
                 var parametros = new DynamicParameters();
                 parametros.Add("@Nombre", usuario.Nombre, DbType.String);
